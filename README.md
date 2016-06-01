@@ -85,7 +85,6 @@ $ docker login localhost:5000
 Username: test
 Password:
 Login Succeeded
-$ 
 ```
 
 The sample token server does not have authentication logic, so any username and password would be accepted.
