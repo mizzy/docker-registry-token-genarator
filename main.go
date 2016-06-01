@@ -48,7 +48,7 @@ func main() {
 
 	token, err := getToken(issuer, service, scope, username)
 
-	fmt.Println(token)
+	fmt.Print(token)
 }
 
 func getToken(issuer *TokenIssuer, service string, scope string, username string) (string, error) {
@@ -66,25 +66,27 @@ func getToken(issuer *TokenIssuer, service string, scope string, username string
 func resolveScopeSpecifiers(scope string) []auth.Access {
 	requestedAccessSet := make(map[auth.Access]struct{}, 2)
 
-	parts := strings.SplitN(scope, ":", 3)
+	if scope != "" {
+		parts := strings.SplitN(scope, ":", 3)
 
-	if len(parts) != 3 {
-		fmt.Printf("ignoring unsupported scope format %s", scope)
-	}
-
-	resourceType, resourceName, actions := parts[0], parts[1], parts[2]
-
-	for _, action := range strings.Split(actions, ",") {
-		requestedAccess := auth.Access{
-			Resource: auth.Resource{
-				Type: resourceType,
-				Name: resourceName,
-			},
-			Action: action,
+		if len(parts) != 3 {
+			fmt.Printf("ignoring unsupported scope format %s", scope)
 		}
 
-		// Add this access to the requested access set.
-		requestedAccessSet[requestedAccess] = struct{}{}
+		resourceType, resourceName, actions := parts[0], parts[1], parts[2]
+
+		for _, action := range strings.Split(actions, ",") {
+			requestedAccess := auth.Access{
+				Resource: auth.Resource{
+					Type: resourceType,
+					Name: resourceName,
+				},
+				Action: action,
+			}
+
+			// Add this access to the requested access set.
+			requestedAccessSet[requestedAccess] = struct{}{}
+		}
 	}
 
 	requestedAccessList := make([]auth.Access, 0, len(requestedAccessSet))
