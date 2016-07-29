@@ -42,7 +42,7 @@ header('Content-Type: application/json');
 $user    = $_GET['account'];
 $service = $_GET['service'];
 
-$command = "./docker-registry-token-genarator -key ./cert.key -service $service -username $user";
+$command = "./docker-registry-token-genarator -key ./cert.key -service '$service' -username '$user'";
 
 if (isset($_GET['scope'])) {
     $command .= ' -scope ' .$_GET['scope'];
